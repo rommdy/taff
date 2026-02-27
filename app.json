@@ -1,0 +1,67 @@
+{
+  "expo": {
+    "name": "LocProd",
+    "slug": "locprod",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "locprod",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f8ece8"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.locprod.app",
+      "associatedDomains": ["applinks:locprod.app"]
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#f8ece8"
+      },
+      "package": "com.locprod.app",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "locprod.app",
+              "pathPrefix": "/product"
+            },
+            {
+              "scheme": "locprod",
+              "host": "product"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-asset",
+      "expo-secure-store",
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibHVmZnk3NSIsImEiOiJjbWppdDYydjUwZ3AzM2NxNTJ3dTA5c29mIn0.Z6-L9AUbYt71YnW2dF6pNw"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1d8085d7-85fc-4126-bcad-cba79fc75a8f"
+      }
+    }
+  }
+}

@@ -1,0 +1,393 @@
+//ProfileScreen.js
+import React from 'react';
+import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import AjouterProduitScreen from './AjouterProduitScreen';
+
+const Stack = createStackNavigator();
+
+const ProfileScreen = () => {
+  const navigation = useNavigation();
+
+  const menuItems = [
+    { id: '1', name: 'Mes Produits', icon: 'list', route: 'MesProduits' },
+    { id: '2', name: 'Ajouter un Produit', icon: 'plus-circle', route: 'AjouterProduit' },
+    { id: '3', name: 'Paramètres', icon: 'cog', route: 'Parametres' },
+  ];
+
+  return (
+    <Stack.Navigator initialRouteName="Profile">
+      <Stack.Screen
+        name="Profile"
+        component={() => (
+          <View style={{ flex: 1, padding: 20 }}>
+            {/* Photo de profil et bouton de déconnexion */}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+              <Image
+                source={require('../../assets/profil.jpg')}
+                style={{ width: 100, height: 100, borderRadius: 50 }}
+              />
+              <TouchableOpacity onPress={() => {/* Action de déconnexion */}}>
+                <FontAwesome name="sign-out" size={25} />
+              </TouchableOpacity>
+            </View>
+
+            {/* Liste d'icônes */}
+            <FlatList
+              data={menuItems}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}
+                  onPress={() => navigation.navigate(item.route)}
+                >
+                  <FontAwesome name={item.icon} size={25} style={{ marginRight: 10 }} />
+                  <Text>{item.name}</Text>
+                </TouchableOpacity>
+              )}
+            />
+
+            {/* Copyright */}
+            <View style={{ justifyContent: 'flex-end', alignItems: 'center', marginBottom: 20 }}>
+              <Text>© 2023 Fréquence 2 Web</Text>
+            </View>
+          </View>
+        )}
+      />
+      <Stack.Screen name="AjouterProduit" component={AjouterProduitScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export default ProfileScreen;
+
+
+// Navigation.js
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import CatalogueScreen from './CatalogueScreen';
+import MapComponent from './MapScreen.js';
+import ProfileScreen from './ProfileScreen';
+
+const Tab = createBottomTabNavigator();
+
+const Navigation = () => {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Catalogue"
+          component={CatalogueScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="list" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Map"
+          component={MapComponent}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="map" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="user" color={color} size={size} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default Navigation;
+
+// LoginScreen.js
+import React, { useState } from 'react';
+import { View, TextInput, Button, Alert } from 'react-native';
+
+const LoginScreen = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        Alert.alert('Connexion réussie');
+        // Naviguer vers une autre page après la connexion réussie
+      } else {
+        Alert.alert('Erreur de connexion');
+      }
+    } catch (error) {
+      console.error('Erreur de connexion:', error);
+    }
+  };
+
+  return (
+    <View>
+      <TextInput
+        placeholder="Nom d'utilisateur"
+        onChangeText={setUsername}
+        value={username}
+      />
+      <TextInput
+        placeholder="Mot de passe"
+        secureTextEntry
+        onChangeText={setPassword}
+        value={password}
+      />
+      <Button title="Se Connecter" onPress={handleLogin} />
+    </View>
+  );
+};
+
+export default LoginScreen;
+
+// ProfileScreen.js
+import React from 'react';
+import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
+
+
+const ProfileScreen = () => {
+  const navigation = useNavigation();
+
+  const menuItems = [
+    { id: '1', name: 'Mes Produits', icon: 'list', route: 'MesProduits' },
+    { id: '2', name: 'Ajouter un Produit', icon: 'plus-circle', route: 'AjouterProduitScreen' },
+    { id: '3', name: 'Paramètres', icon: 'cog', route: 'Parametres' },
+  ];
+
+  return (
+    <View style={{ flex: 1, padding: 20 }}>
+      {/* Photo de profil et bouton de déconnexion */}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+        <Image
+          source={require('../../assets/profil.jpg')}
+          style={{ width: 100, height: 100, borderRadius: 50 }}
+        />
+        <TouchableOpacity onPress={() => {/* Action de déconnexion */}}>
+          <FontAwesome name="sign-out" size={25} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Liste d'icônes */}
+      <FlatList
+        data={menuItems}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}
+            onPress={() => navigation.navigate(item.route)}
+          >
+            <FontAwesome name={item.icon} size={25} style={{ marginRight: 10 }} />
+            <Text>{item.name}</Text>
+          </TouchableOpacity>
+        )}
+      />
+
+      {/* Copyright */}
+      <View style={{ justifyContent: 'flex-end', alignItems: 'center', marginBottom: 20 }}>
+        <Text>© 2023 Fréquence 2 Web</Text>
+      </View>
+    </View>
+  );
+};
+
+export default ProfileScreen;
+
+
+// ProfileScreen.js
+import React from 'react';
+import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
+
+const ProfileScreen = ({ onLogout }) => {
+  const navigation = useNavigation();
+
+  const menuItems = [
+    { id: '1', name: 'Mes Produits', icon: 'list', route: 'MesProduits' },
+    { id: '2', name: 'Ajouter un Produit', icon: 'plus-circle', route: 'AjouterProduitScreen' },
+    { id: '3', name: 'Paramètres', icon: 'cog', route: 'Parametres' },
+  ];
+
+  const handleLogout = () => {
+    // Effectue les actions nécessaires pour déconnecter l'utilisateur (à définir)
+    // Appelle la fonction onLogout fournie par la prop
+    onLogout();
+  };
+
+  return (
+    <View style={{ flex: 1, padding: 20 }}>
+      {/* Photo de profil et bouton de déconnexion */}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+        <Image
+          source={require('../../assets/profil.jpg')}
+          style={{ width: 100, height: 100, borderRadius: 50 }}
+        />
+        <TouchableOpacity onPress={handleLogout}>
+          <FontAwesome name="sign-out" size={25} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Liste d'icônes */}
+      <FlatList
+        data={menuItems}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}
+            onPress={() => navigation.navigate(item.route)}
+          >
+            <FontAwesome name={item.icon} size={25} style={{ marginRight: 10 }} />
+            <Text>{item.name}</Text>
+          </TouchableOpacity>
+        )}
+      />
+
+      {/* Copyright */}
+      <View style={{ justifyContent: 'flex-end', alignItems: 'center', marginBottom: 20 }}>
+        <Text>© 2023 Fréquence 2 Web</Text>
+      </View>
+    </View>
+  );
+};
+
+export default ProfileScreen;
+
+// Navigation.js
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import CatalogueScreen from './CatalogueScreen';
+import MapComponent from './MapScreen.js';
+import ProfileScreen from './ProfileScreen';
+import LoginScreen from '../../LoginScreen';
+
+const Tab = createBottomTabNavigator();
+
+const Navigation = () => {
+  const [userLoggedIn, setUserLoggedIn] = useState(false); // Utilise un état pour gérer l'état de connexion
+
+  if (!userLoggedIn) {
+    // Si l'utilisateur n'est pas connecté, affiche l'écran de connexion
+    return (
+      <NavigationContainer>
+        <LoginScreen onLogin={() => setUserLoggedIn(true)} />
+      </NavigationContainer>
+    );
+  }
+
+  // Si l'utilisateur est connecté, affiche l'écran de navigation avec les onglets
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Catalogue"
+          component={CatalogueScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="list" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Map"
+          component={MapComponent}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="map" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="user" color={color} size={size} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default Navigation;
+
+
+// LoginScreen.js
+import React, { useState } from 'react';
+import { View, TextInput, Button, Alert } from 'react-native';
+
+const LoginScreen = ({ onLogin }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      // Effectue la requête HTTP pour la connexion (comme dans l'exemple précédent)
+
+      // Si la connexion réussit, appelle la fonction onLogin fournie par la prop
+      onLogin();
+      Alert.alert('Connexion réussie');
+    } catch (error) {
+      console.error('Erreur de connexion:', error);
+      Alert.alert('Erreur de connexion');
+    }
+  };
+
+  return (
+    <View>
+      <TextInput
+        placeholder="Nom d'utilisateur"
+        onChangeText={setUsername}
+        value={username}
+      />
+      <TextInput
+        placeholder="Mot de passe"
+        secureTextEntry
+        onChangeText={setPassword}
+        value={password}
+      />
+      <Button title="Se Connecter" onPress={handleLogin} />
+    </View>
+  );
+};
+
+export default LoginScreen;
+
+
+//navigation.js
+<Tab.Screen
+name="Profile"
+component={() => <ProfileScreen onLogout={handleLogout} />}
+options={{
+  tabBarIcon: ({ color, size }) => (
+    <FontAwesome name="user" color={color} size={size} />
+  ),
+}}
+/>
