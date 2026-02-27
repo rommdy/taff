@@ -140,7 +140,7 @@ const PORT = process.env.PORT || 5000;
 
 // Connexion à la base de données puis démarrage du serveur
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     logger.info(`🚀 Serveur démarré sur le port ${PORT}`);
     logger.info(`📝 Environnement: ${process.env.NODE_ENV || 'development'}`);
     logger.info(`🌐 URL: ${process.env.BASE_URL || `http://localhost:${PORT}`}`);
