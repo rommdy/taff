@@ -4,9 +4,17 @@ const logger = require('./logger');
 
 const connectDB = async () => {
   try {
+    console.log('🔄 Tentative de connexion MongoDB...');
+    console.log('📍 URI:', process.env.MONGODB_URI ? 'Définie' : 'NON DÉFINIE');
+    
+    if (!process.env.MONGODB_URI) {
+      throw new Error('MONGODB_URI non définie dans les variables d\'environnement');
+    }
+    
     const conn = await mongoose.connect(process.env.MONGODB_URI);
 
     logger.info(`✅ MongoDB connecté: ${conn.connection.host}`);
+    console.log(`✅ MongoDB connecté: ${conn.connection.host}`);
     
     // Gestion des événements de connexion
     mongoose.connection.on('error', (err) => {
@@ -25,6 +33,8 @@ const connectDB = async () => {
     });
 
   } catch (error) {
+    console.error('❌ Erreur de connexion MongoDB:', error.message);
+    console.error('❌ Stack:', error.stack);
     logger.error('❌ Erreur de connexion MongoDB:', error.message);
     process.exit(1);
   }
